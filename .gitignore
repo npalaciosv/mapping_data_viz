@@ -14,3 +14,6 @@
 
 # Ignorar base de datos
 *.db
+
+# Ignorar geojson
+*.geojson
