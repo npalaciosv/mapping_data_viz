@@ -15,8 +15,8 @@
 # Ignorar base de datos
 *.db
 
-# Ignorar todos los archivos .geojson
+# Ignorar archivos geojson
 *.geojson
 
-# Si tienes más archivos geojson que deseas ignorar, puedes añadirlos aquí
+# Ignorar archivos geojson específicos
 Departamentos.geojson
