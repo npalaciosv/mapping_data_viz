@@ -1,0 +1,16 @@
+# Ignorar archivos Excel
+*.xlsx
+*.xls
+
+# Ignorar archivos CSV
+*.csv
+
+# Ignorar archivos Word
+*.docx
+*.doc
+
+# Ignorar archivos ZIP
+*.zip
+
+# Ignorar base de datos
+*.db
