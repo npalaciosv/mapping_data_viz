@@ -16,7 +16,7 @@
 *.db
 
 # Ignorar archivos geojson
-*.geojson
+*.json
 
-# Ignorar archivos geojson específicos
-Departamentos.geojson
+# Ignorar archivos HTML
+*.html
