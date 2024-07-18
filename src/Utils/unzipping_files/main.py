@@ -4,9 +4,9 @@ import shutil
 
 class extraer_archivos():
 
-    def __init__(self,raw_data = '/home/npalaciosv/Catedra/Geoanalitycs/src/Data/Raw',silver_data='/home/npalaciosv/Catedra/Geoanalitycs/src/Data/Silver'):
-        self.raw_data = raw_data
-        self.silver_data = silver_data
+    def __init__(self,raw_path = '/home/npalaciosv/Catedra/Geoanalitycs/src/Data/Raw/',silver_path='/home/npalaciosv/Catedra/Geoanalitycs/src/Data/Silver/'):
+        self.raw_path = raw_path
+        self.silver_path = silver_path
 
     def descomprimir_archivos(self):
         # Creamos un objetio Path con la direccion de los archivos crudos
@@ -58,10 +58,11 @@ class extraer_archivos():
                     # Buscamos los archivos .csv y los movemos a un nivel anterior en el path, es decir, los ponemos al nivel de los anteriores
                     if subfile.suffix == '.csv':
                         subfile.replace(self.silver_path+"/"+subfile.name)
-                        print(f'Archivo: {subfile.name} movido exitosamente')
 
                 # Eliminamos la carpeta una vez el archivo se ha movido al nivel anterior
                 shutil.rmtree(subfolder)
+
+        print("Los archivos se han extraido correctamente")
 
 if __name__ == "__main__":
     extractor = extraer_archivos()
