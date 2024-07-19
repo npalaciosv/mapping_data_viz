@@ -12,6 +12,37 @@ import streamlit_folium as st_folium
 extractor = extraer_archivos()
 extractor.descomprimir_archivos()
 
-#%% Creamo el mapa y traemos la informacion en un dataframe
-creador = crear_mapa()
-map,df = creador.pintar_mapa()
+ic = ingenieria_caracteristicas()
+ic.enviar_bases()
+
+data = sql.traer_datos()
+
+# Configurar panel lateral
+st.sidebar.header('Filtros')
+
+# Barra desplazable para la selección de fechas
+fecha = st.sidebar.slider('Fecha', min_date, max_date, (min_date, max_date))
+municipio = st.sidebar.multiselect('Municipio', data['Municipio'].unique())
+mayorista = st.sidebar.multiselect('Mayorista', data['Mayorista'].unique())
+alimento = st.sidebar.multiselect('Alimento', data['Alimento'].unique())
+grupo = st.sidebar.multiselect('Grupo', data['Grupo'].unique())
+
+# Aplicar filtros
+df_fact = 1 #sql respectivo
+df_mun = 1 #sql respectivo
+df_may = 1 #sql respectivo
+df_dep = 1 #sql respectivo
+
+if municipio:
+    df = df[df['Municipio'].isin(municipio)]
+if mayorista:
+    df = df[df['Mayorista'].isin(mayorista)]
+if alimento:
+    df = df[df['Alimento'].isin(alimento)]
+if grupo:
+    df = df[df['Grupo'].isin(grupo)]
+
+map = crear_map(df_mun,df_may,df_dep)
+
+# Mostrar el mapa en Streamlit
+st_data = st_folium(map, width=700, height=500)
