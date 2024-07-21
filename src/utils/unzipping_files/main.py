@@ -1,6 +1,7 @@
 import zipfile
 from pathlib import Path
 import shutil
+from tqdm import tqdm
 
 class extraer_archivos():
 
@@ -12,8 +13,10 @@ class extraer_archivos():
         # Creamos un objetio Path con la direccion de los archivos crudos
         data_files = Path(self.raw_path)
 
+        print('---------Proceso de descompresion iniciado---------')
+
         # Recorremos cada uno de los archivos usando la funcion rglob('*')
-        for file in data_files.rglob('*'):
+        for file in tqdm(data_files.rglob('*'),desc='Descomprimiendo archivos'):
 
             # Para evitar que los espacios y el guion bajo afecten algun comando, los eliminamos del nombre del archivo
             new_name = file.name.replace(" ","").replace("_","")
@@ -34,7 +37,7 @@ class extraer_archivos():
         silver_files = Path(self.silver_path)
 
         # Recorremos cada uno de los archivos para verificar su extension. Usamos la funcion iterdir()
-        for file in silver_files.iterdir():
+        for file in tqdm(silver_files.iterdir(),desc='Eliminando archivos innecesarios'):
 
             # Verificamos si es un archivo (ya que puede ser una carpeta) y no termina en '.csv'
             if file.is_file() and file.suffix != '.csv':
@@ -43,7 +46,7 @@ class extraer_archivos():
                 file.unlink()
 
         # Recorremos cada uno de los archivos para verificar que sea una carpeta
-        for file in silver_files.iterdir():
+        for file in tqdm(silver_files.iterdir(),desc='Moviendo archivos a ubicacion requerida'):
 
             # Si archivo es realmente un archivo, sin importar el formato, no pasará nada, pero si es una carpeta movera el archivo fuera de esta
             if file.is_file():
@@ -62,7 +65,7 @@ class extraer_archivos():
                 # Eliminamos la carpeta una vez el archivo se ha movido al nivel anterior
                 shutil.rmtree(subfolder)
 
-        print("Los archivos se han extraido correctamente")
+        print('---------Proceso de descompresion finalizado---------')
 
 if __name__ == "__main__":
     extractor = extraer_archivos()
