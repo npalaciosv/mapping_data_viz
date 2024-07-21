@@ -1,5 +1,4 @@
 #%% Importamos las librerias
-from utils.unzipping_files import extraer_archivos
 import pandas as pd
 import streamlit as st
 from datetime import datetime
@@ -7,7 +6,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import streamlit_folium as st_folium
 
+from utils.unzipping_files import extraer_archivos
 from utils.feature_engineering import feature_engineering
+from utils.data_retrieving import consultar_info
 
 address = {
 'raw_path' : '/home/npalaciosv/Catedra/Geoanalitycs/src/Data/Raw/',
@@ -23,23 +24,28 @@ address = {
 extractor = extraer_archivos()
 extractor.descomprimir_archivos()
 
+#%%
 ic = feature_engineering(address)
-
 ic.borrar_todas_las_tablas()
 ic.enviar_bases()
 
-#conn = sqlite3.connect(user_path)
-#data = pd.read_sql_query()
+#%%
+query = consultar_info(address)
+query.crear_vista()
 
+#%%
 # Configurar panel lateral
 st.sidebar.header('Filtros')
 
+min_date = 1
+max_date = 15
+
 #Barra desplazable para la selección de fechas
-#fecha = st.sidebar.slider('Fecha', min_date, max_date, (min_date, max_date))
-#municipio = st.sidebar.multiselect('Municipio', data['Municipio'].unique())
-#mayorista = st.sidebar.multiselect('Mayorista', data['Mayorista'].unique())
-#alimento = st.sidebar.multiselect('Alimento', data['Alimento'].unique())
-#grupo = st.sidebar.multiselect('Grupo', data['Grupo'].unique())
+fecha = st.sidebar.slider('Fecha', min_date, max_date, (min_date, max_date))
+municipio = st.sidebar.multiselect('Municipio', data['Municipio'].unique())
+mayorista = st.sidebar.multiselect('Mayorista', data['Mayorista'].unique())
+alimento = st.sidebar.multiselect('Alimento', data['Alimento'].unique())
+grupo = st.sidebar.multiselect('Grupo', data['Grupo'].unique())
 
 # Aplicar filtros
 #df_fact = 1 #sql respectivo

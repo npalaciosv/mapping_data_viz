@@ -193,7 +193,7 @@ class feature_engineering():
                         df_chunk = df_coor_int.iloc[start:end]
                         df_chunk.to_sql('Coordenadas_internacionales', con=conn, if_exists='append', index=False)
 
-                print('---------Proceso de ingenieria de datos iniciado---------')
+                print('---------Proceso de ingenieria de datos finalizado---------')
 
 if __name__ == "__main__":
         ic = feature_engineering()
