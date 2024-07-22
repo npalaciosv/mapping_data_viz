@@ -10,6 +10,7 @@ from utils.unzipping_files import extraer_archivos
 from utils.feature_engineering import feature_engineering
 from utils.data_retrieving import consultar_info
 
+
 address = {
 'raw_path' : '/home/npalaciosv/Catedra/Geoanalitycs/src/Data/Raw/',
 'silver_path' : '/home/npalaciosv/Catedra/Geoanalitycs/src/Data/Silver/',
@@ -32,13 +33,15 @@ ic.enviar_bases()
 #%%
 query = consultar_info(address)
 query.crear_vista()
-
+data = query.obtener_datos()
 #%%
 # Configurar panel lateral
 st.sidebar.header('Filtros')
 
-min_date = 1
-max_date = 15
+#%%
+min_date = data['Fecha'].min()
+print(min_date)
+max_date = data['Fecha'].max()
 
 #Barra desplazable para la selección de fechas
 fecha = st.sidebar.slider('Fecha', min_date, max_date, (min_date, max_date))
@@ -66,3 +69,4 @@ grupo = st.sidebar.multiselect('Grupo', data['Grupo'].unique())
 
 # Mostrar el mapa en Streamlit
 #st_data = st_folium(map, width=700, height=500)
+# %%

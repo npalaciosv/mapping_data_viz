@@ -1,4 +1,6 @@
 import sqlite3
+import pandas as pd
+from tqdm import tqdm
 
 class consultar_info():
     def __init__(self,address):
@@ -49,3 +51,38 @@ class consultar_info():
             # Manejo general de errores
             print(f"Error al consultar datos: {e}")
         print('---------Proceso de creacion de la vista general finalizado---------')
+
+    def obtener_datos(self):
+        print('---------Proceso de obtencion de datos iniciado---------')
+        conn = sqlite3.connect(self.db_path)
+
+        # Ejecutar la consulta y obtener los datos
+        query = "SELECT DISTINCT cc.* FROM consulta_consolidada cc;"
+
+        # Obtener la cantidad de registros
+        count_query = "SELECT COUNT(*) FROM (SELECT DISTINCT cc.* FROM consulta_consolidada cc);"
+        total_rows = pd.read_sql_query(count_query, conn).iloc[0, 0]
+
+        # Leer los datos usando tqdm para mostrar progreso
+        chunksize = 1000  # Tamaño del chunk para la lectura
+        data_iter = pd.read_sql_query(query, conn, chunksize=chunksize)
+
+        # Inicializar un DataFrame vacío
+        data = pd.DataFrame()
+
+        # Usar tqdm para mostrar la barra de progreso
+        for chunk in tqdm(data_iter, total=total_rows//chunksize, unit='chunk',desc="Obteniendo informacion"):
+            data = pd.concat([data, chunk])
+
+        # Cerrar la conexión a la base de datos
+        conn.close()
+
+        data['Fecha'] = pd.to_datetime(data['Fecha'], format='%d/%m/%Y')
+
+        return data
+
+if __name__ == "__main__":
+    address = {'db_path': '/mnt/d/Classes/Data visualization/Mapping data/Database/geo.db'}
+    consulta = consultar_info(address)
+    consulta.crear_vista()
+    data = consulta.obtener_datos()
